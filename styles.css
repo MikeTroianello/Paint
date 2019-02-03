@@ -1,0 +1,28 @@
+#start-button{
+  text-align: center;
+  height: 50px;
+  border-style: solid;
+  border-color: black;
+}
+
+#game-board{
+  float:right;
+  border: 1px solid black;
+}
+
+#background{
+  position: absolute;
+  z-index: -1;
+}
+
+.container{
+  width: 510px;
+  height: 690px;
+  float:left;
+  border: 1px solid black;
+}
+
+.game-instructions{
+  text-align: center;
+  padding: 10px;
+}
