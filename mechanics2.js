@@ -4,33 +4,16 @@
   let actionCtx = actionCanvas.getContext('2d');
   let height = canvas.height;
   let width = canvas.width;
-  let y1=0;
-
-  //PRELIMINARY VARIABLES
-
-
-// var primaryColors = ["red", "blue", "yellow"];
-// var floorColors = ["red", "blue", "yello", "sludge"]
-
-
-// let column = {
-//   width: 180,
-//   height: 690,
-// }
-
-
-// let tile = {
-//   width: 180,
-//   height: 100,
-// }
-
+  let y1 = -50;
+  let health = 3;
 
 window.onload = function() {
-  createEnemy();
+  // createEnemy();
   
 
   document.getElementById("start-button").onclick = function() {
     drawBackground(ctx, width, height);
+    createEnemy();
     drawEnemy();
     moveEnemy();
     animate();
@@ -89,26 +72,24 @@ function drawBackground(ctx, width, height) {
   ctx.fillRect(2, (row*3.5)+4, width-4, 125)
 }
 
-
+//PLAYER CHARACTER
 var car = {
   x: 55,
   c: 1,
   moveLeft:  function() { this.x -= 182},
   moveRight: function() { this.x += 182},
-  fire: function() {console.log("FIRE")},
-  changeColor: function() {
-    if (car.c==1){
-      console.log("Red")
-    }
-    else if (car.c==2){
-      console.log("Blue")
-    }
-    else if (car.c==3){
-      console.log("Yellow")
-    }
-    else {
-      console.log("ERROR")
-    }
+}
+
+function fire() {
+  console.log(car.x);
+  console.log(enemies[0].spawnPoint)
+  if (car.x == enemies[0].spawnPoint - 30){
+    console.log("HIT");
+    y1 = -50;
+    enemies.shift();
+  }
+  else{
+    console.log("MISS");
   }
 }
 
@@ -120,6 +101,7 @@ function draw(car) {
   img.src = "/Users/miketroianello/Desktop/Project1/STICKMAN.png"
 }
 
+//PLAYER MOVEMENTS
 document.onkeydown = function(e) {
   switch (e.keyCode) {
     case 37: 
@@ -143,23 +125,19 @@ document.onkeydown = function(e) {
       }
     
     case 32: 
-      car.fire();
-
+      fire();
       break;
     
     case 65:
       car.c=1;
-      car.changeColor();
       break;
     
     case 83:
       car.c=2;
-      car.changeColor();
       break; 
 
     case 68:
       car.c=3;
-      car.changeColor();
       break;
 
 
@@ -181,26 +159,25 @@ class Enemy{
 }
 
 function createEnemy() {
-  
-  let randomColor = Math.floor(Math.random() * 3);
-  let randomSpawn= Math.floor(Math.random() * 5) * 182 + 55;
+  for(let i = 0; i<5; i++){
+  let randomColor = Math.floor(Math.random() * 3)+1;
+  let randomSpawn= Math.floor(Math.random() * 5) * 182 + 85;
   
   enemies.push(new Enemy(randomColor, randomSpawn))
+  }
 }
 
 function drawEnemy () {
-  for (let i = 0; i < enemies.length; i++){
-   if (enemies[i].color == 1){
+   if (enemies[0].color == 1){
     actionCtx.fillStyle = 'red';
    }
-   else if (enemies[i].color == 2){
+   else if (enemies[0].color == 2){
     actionCtx.fillStyle = 'blue';
    }
-   else if (enemies[i].color == 3){
+   else if (enemies[0].color == 3){
     actionCtx.fillStyle = 'yellow';
    }
   }
-}
 
 function clearCanvas() {
   actionCtx.clearRect(0,0,900,690);
@@ -211,11 +188,21 @@ function moveEnemy(){
   clearCanvas();
   drawEnemy();
   actionCtx.beginPath();
-  actionCtx.arc(85, y1, 30, 0, 90);
+  // actionCtx.fillStyle="red;"
+  actionCtx.arc(enemies[0].spawnPoint, y1, 30, 270, 360);
+  actionCtx.fill()
   actionCtx.stroke();
-  if(y1 >= 520) {
-    y1=-30
+  if(y1 >= 532) {
+    
+    health--;
+    y1=-50
+    enemies.shift()
+
+    drawEnemy()
   }
+  // if (health<=0){
+  //   alert("YOU LOSE")
+  // }
  window.requestAnimationFrame(moveEnemy);
 }
 
