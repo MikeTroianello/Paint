@@ -3,6 +3,8 @@
   height: 50px;
   border-style: solid;
   border-color: black;
+  background-color: #ff008c;
+  border-radius: 15px;
 }
 
 #game-board{
@@ -20,9 +22,26 @@
   height: 690px;
   float:left;
   border: 1px solid black;
+  background-color: #98abb8;
 }
 
 .game-instructions{
   text-align: center;
   padding: 10px;
+}
+
+.blue{
+  color: blue;
+}
+
+.yellow{
+  color: yellow;
+}
+
+.green{
+  color: green
+}
+
+.red{
+  color: red;
 }

@@ -1,3 +1,4 @@
+
   let canvas = document.getElementById('background');
   let actionCanvas = document.getElementById('main');
   let ctx = canvas.getContext('2d');
@@ -5,7 +6,7 @@
   let height = canvas.height;
   let width = canvas.width;
   let y1 = -50;
-  let health = 3;
+  let health = 1;
   let score = 0;
   var pop = new Audio("/Users/miketroianello/Desktop/Project1/pop.wav");
   var sludgePop = new Audio('/Users/miketroianello/Desktop/Project1/sludge-pop.wav');
@@ -14,24 +15,30 @@
   var targetHit = new Audio('targetHit.wav');
   var win = new Audio('/Users/miketroianello/Desktop/Project1/win.wav');
   var lose = new Audio('/Users/miketroianello/Desktop/Project1/lose.wav');
-  
+  let gameOn = false;
   // audio.play();
 
-window.onload = function() {
-
-  assignTiles();
+// window.onload = function() {
+  window.onload = function() { 
   document.getElementById("start-button").onclick = function() {
-    console.log('start')
-    document.getElementById("start-button").blur();
-    drawBackground(ctx, width, height);
-    // assignTiles();
-    // colorTiles();
-    createEnemy();
-
-    moveEnemy();
+    if(!gameOn){
+    playGame();
   };
-
 };
+
+}
+
+function playGame(){
+  assignTiles();
+
+  console.log("PLAYING")
+  gameOn = true;
+  score = 0;
+  document.getElementById("start-button").blur();
+  drawBackground(ctx, width, height);
+  createEnemy();
+  animate();
+  }
 
 //TILES
 var tiles = [];
@@ -48,6 +55,7 @@ class Tile {
 
 
 function assignTiles() {
+  tiles = []
   for(let i=0; i<5; i++){
     let mini = []
     for(let n=0; n<3; n++){
@@ -104,25 +112,15 @@ function colorTiles(){
 
 
 
-
-
 //DRAW BACKGROUND
 function drawBackground(ctx, width, height) {
   let col = width/5;
   let row = 160;
-  // ctx.fillStyle = "#f7f7e3";
-  // ctx.fillRect(0, 0, width, height)  
   colorTiles();
-  
   
   //SLUDGE TILES
   ctx.fillStyle = "#5b5037";
   ctx.fillRect(2, (row*3)+1, width-4, (row/2))
- 
- 
- //TESTING TILES
-  // ctx.fillStyle = "purple";
-  // ctx.fillRect(2, 2, col-2, row-2)
   
   //VERTICAL BARS
   ctx.fillStyle = "#000000";
@@ -159,17 +157,17 @@ var player = {
   moveLeft:  function() { this.x -= 182},
   moveRight: function() { this.x += 182},
   fire: function() {
-
+    console.log("FIRE")
     if (player.x == enemies[0].spawnPoint - 30){    
       testShooting();
       
       enemies.shift();
       
       if (enemies.length <= 0){
-        win.play();
-        alert(`YOU WIN! Score: ${score}. Health: ${health}`)
+        // win.play();
+        winScreen();
       }
-      enemies[0].y = -50;
+       enemies[0].y = -50;
     }
     else{
       console.log("MISS");
@@ -179,10 +177,14 @@ var player = {
   },
 }
 
+
+//SHOOTING MECHANICS
 function testShooting() {
+  console.log("TEST SHOOT")
   let zone = (enemies[0].spawnPoint - 85)/182;
   let zoneVertical = null
   console.log(enemies[0].y)
+  console.log(enemies, player, tiles)
   if(enemies[0].y <= 159){
     if(enemies[0].color+player.c == tiles[zone][0].color && enemies[0].color != player.c){
       console.log("+4")
@@ -218,23 +220,25 @@ function testShooting() {
   }
   else{
     console.log("+1");
-    //mySound = new sound("/Users/miketroianello/Desktop/Project1/sludge-pop.wav");
     sludgePop.play();
     score ++;
   }
-  // debugger
 }
 
 function sludge(zone, zoneVertical){
+  if(tiles[zone][zoneVertical].color != 0){
   ctx.fillStyle = "#5b5037";
   ctx.fillRect(tiles[zone][zoneVertical].spawnX, tiles[zone][zoneVertical].spawnY, tiles[zone][zoneVertical].finishX, 158);
   tiles[zone][zoneVertical].color = 0;
-  //mySound = new sound("/Users/miketroianello/Desktop/Project1/sludge-pop.wav");
   sludgePop.play();
-  score ++
+  score -=4
+  }
+  else {
+    sludgePop.play();
+  }
 }
 
-
+//PLAYER
 
 var img = new Image();
 img.onload = function() { 
@@ -242,15 +246,17 @@ img.onload = function() {
 img.src = "/Users/miketroianello/Desktop/Project1/STICKMAN.png"
 function draw(player) {
   ctx.drawImage(img, player.x, 575, 60, 100); 
-}
+} 
 
 //PLAYER MOVEMENTS
 document.onkeydown = function(e) {
+  if (e.keyCode == 32 && e.target == document.body) {
+    e.preventDefault();
+  }
   switch (e.keyCode) {
     case 37: 
       if(player.x >= 80) {
         player.moveLeft();  
-          // console.log('left',  player); 
           break;
         }
       else {
@@ -260,7 +266,6 @@ document.onkeydown = function(e) {
     case 39: 
       if(player.x <= 700) { 
         player.moveRight(); 
-          // console.log('right', player); 
           break;
         } 
       else{
@@ -294,8 +299,6 @@ document.onkeydown = function(e) {
 
 
 
-
-
 //ENEMIES
 var enemies = [];
 
@@ -318,11 +321,12 @@ function createEnemy() {
 }
 
 function drawEnemy () {
-  
-   enemies[0].y += 1;
+  //console.log(enemies)
+  if(!enemies[0]){ return; }
+   enemies[0].y += 1.5;
    actionCtx.beginPath();
    // actionCtx.fillStyle="red;"
-   actionCtx.arc(enemies[0].spawnPoint, enemies[0].y, 30, 270, 360);
+   actionCtx.arc(enemies[0].spawnPoint, enemies[0].y, 40, 270, 360);
    actionCtx.fill()
    actionCtx.stroke();
    
@@ -343,13 +347,10 @@ function drawEnemy () {
     enemies[0].y=-50
 
 
-   // drawEnemy()
+
   }
   if (health<=0){
-      lose.play();
-      alert("YOU LOSE. " + "Final score: " + score)
-      health=3;
-      enemies = [];
+      loseScreen();
   }   
 }
 
@@ -357,86 +358,260 @@ function clearCanvas() {
   actionCtx.clearRect(0,0,900,690);
 }
 
-
-
-function moveEnemy(){
+//ANIMATION
+let ANIM; 
+function animate(){
   clearCanvas();
   draw(player);
   drawEnemy();
-window.requestAnimationFrame(moveEnemy);
+  ANIM = window.requestAnimationFrame(animate);
 }
-
-
 
 function updateCanvas(){
   ctx.clearRect(0,0, width ,height);
   drawBackground(ctx, width, height);
 }
 
-// function fire() {
-//   console.log(player.x);
-//   console.log(enemies[0].spawnPoint)
-//   if (player.x == enemies[0].spawnPoint - 30){
-//     console.log("HIT");
-//     y1 = -50;
-//     score ++;
-//     enemies.shift();
-//     if (enemies.length <= 0){
-//       alert(`YOU WIN! Score: ${score}. Health: ${health}`)
-//     }
-    
-//   }
-//   else{
-//     console.log("MISS");
-//     score --;
-//   }
-// }
+function loseScreen() {
+  lose.play();
+  health=1;
+  enemies = [];
+  ctx.clearRect(0,0, width ,height);
+  actionCtx.clearRect(0,0, width ,height);ctx.clearRect(0,0, width ,height);
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0,0, width ,height);
+  ctx.font = "120px monospace";
+  ctx.fillStyle = "RED";
+  ctx.fillText("YOU LOSE!", 50,200);
+  ctx.fillStyle = "white";
+  ctx.font = "50px monospace";
+  setInterval(function(){}, 3000);ctx.fillText("Your final Score: ", 150,300);
+  window.setTimeout(function(){
+  ctx.fillText("" + score, 480, 400)}, 1200);
+  assignTiles();
+  gameOn = false;
+  //playGame();
+};
 
-// function assignTiles() {
-//   for(let i=0; i<5; i++){
-//     let mini = []
-//     for(let n=0; n<3; n++){
-//       let randomColor = Math.floor(Math.random() * 3)+3;
-//       let spawnX = (i*180)+2;
-//       let spawnY = (n*160)+2
-//       mini.push(new Tile(randomColor, spawnX, spawnY))
-//         if (n==2){
-//           do{
-//             mini[1].color = Math.floor(Math.random() * 3)+3;
-//           }
-//           while(mini[0].color === mini[1].color);
-//           do{
-//             mini[2].color = Math.floor(Math.random() * 3)+3;
-//           }
-//           while(mini[2].color === mini[1].color || mini[2].color === mini[0].color);
-//            tiles.push([mini[0], mini[1], mini[2]])
-//         } 
-//       }
-//     }
-//   console.log(tiles);
-// }
 
-// function assignTiles() {
-//   for(let i=0; i<5; i++){
-//     for(let n=0; n<3; n++){
-//       let randomColor = Math.floor(Math.random() * 3)+3;
-//       if(i==0){
-//         spawnX = (i*180)+2;
-//         finishX = 178;
-//       }
-//       else if (i==4){
-//         spawnX = (i*180)+3;
-//         finishX = 175;
-//       }
-//       else {
-//         spawnX = (i*180)+3;
-//         finishX = 177;
-//       }
-        
-//         let spawnY = (n*160)+2;
-//       tiles.push(new Tile(randomColor, spawnX, spawnY, finishX))
-//     }
-    
-//   }
-//   console.log(tiles)
-// }
+function winScreen () {
+  win.play();
+  health=1;
+  enemies = [];
+  ctx.clearRect(0,0, width ,height);
+  actionCtx.clearRect(0,0, width ,height);ctx.clearRect(0,0, width ,height);
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0,0, width ,height);
+  ctx.font = "90px monospace";
+  ctx.fillStyle = "blue";
+  ctx.fillText("LEVEL COMPLETE!", 50,200);
+  ctx.fillStyle = "white";
+  ctx.font = "50px monospace";
+  setInterval(function(){}, 3000);ctx.fillText("Your final Score: ", 150,300);
+  window.setTimeout(function(){
+  ctx.fillText("" + score, 480, 400)}, 1000);
+  assignTiles();
+  finalGrade();
+  
+  restart();
+  }
+
+function finalGrade() {
+  var critique = [];
+  let randomChance = Math.floor(Math.random() * 11) ;
+  let rq = Math.floor(Math.random() * 5);
+  if (randomChance == 7) {
+    critique = randomQuote;
+  }
+  else {
+    if(score <= 0) {
+      critique= badScore;
+    }
+    else if(score > 0 && score <= 10)  {
+      critique=lowScore;
+    }
+    else if(score > 10 && score <= 20)  {
+      critique=goodScore;
+    }
+    else if(score > 20)  {
+      critique=highScore;
+    }
+  }
+
+  window.setTimeout(function(){
+    ctx.font = "35px monospace";
+    ctx.fillText("What the people say:", 130, 460)}, 2000);
+ 
+  window.setTimeout(function(){
+     ctx.font = "20px monospace";
+     ctx.fillText(critique[rq].quote, critique[rq].start_placement, 520)}, 3500);
+ 
+  window.setTimeout(function(){
+     ctx.font = "16px monospace";
+     ctx.fillText(critique[rq].source, 200, 550)}, 5500);
+
+  window.setTimeout(function(){
+      ctx.font = "25px monospace";
+      ctx.fillText("Press any key to continue", 50, 650)}, 5500);
+ }
+
+
+//ART CRITIQUE
+var badScore = [
+  {
+    quote:"I am legitimately offended by this.",
+    source:"-The Briggsdale Pornographer",
+    start_placement: 175,
+  },
+  {
+    quote:"I wish general misfortune on this artist",
+    source:"-Notably irate patron",
+    start_placement: 175,
+  },
+  {
+    quote:"We're not angry, we're just disappointed",
+    source:"-Your parents",
+    start_placement: 175,
+  },
+  {
+    quote:"This is worse than the time the raccoon got in the copier",
+    source:"-Hoser(2004)",
+    start_placement: 175,
+  },
+  {
+    quote:"I don't like this",
+    source:"-The only honest person in the room",
+    start_placement: 175,
+  },
+
+
+];
+
+
+var lowScore = [
+  {
+    quote:"meh...",
+    source:"-Overall consensus of the room",
+    start_placement: 175,
+  },
+  {
+    quote:"You sure got $40,000 out of that art education, didn't you?",
+    source:"-Dad",
+    start_placement: 145,
+  },
+  {
+    quote:"Like a less coherent Jackson Pollack",
+    source:"-Local art reviewer",
+    start_placement: 175,
+  },
+  {
+    quote:"Reminds me of that art they have inside Taco Bell",
+    source:"-Taco Bell frequenter",
+    start_placement: 165,
+  },
+  {
+    quote:"It's no MC Escher. Or MC Hammer, for that matter. I miss parachute pants...",
+    source:"-Grumpy Gen-Xer",
+    start_placement: 10,
+  },
+  
+];
+
+var goodScore = [
+  {
+    quote:"I see they really took the Claude Manet approach. Real impressionable",
+    source:"-Flummoxed guy trying to impress his date",
+    start_placement: 30,
+  },
+  {
+    quote:"How very Kaftkaesque",
+    source:"-The worst kind of person",
+    start_placement: 175,
+  },
+  {
+    quote:"Better than the macaroni art on my fridge. Probably tastes better too",
+    source:"-Parent of mediocre child",
+    start_placement: 55,
+  },
+  {
+    quote:"I mean, it's kinda cool",
+    source:"-Likely the best compliment you'll get",
+    start_placement: 175,
+  },
+  {
+    quote:"I'd hang it in my bathroom. Probably",
+    source:"-Frugal patron",
+    start_placement: 175,
+  },
+  
+];
+
+var highScore = [
+  {
+    quote:"Oh, I just Louvre this!",
+    source:"-Father of embarrassed teenager",
+    start_placement: 175,
+  },
+  {
+    quote:"It's great! I just knew you had to be good at something.",
+    source:"-Mom",
+    start_placement: 135,
+  },
+  {
+    quote:"It's like a Lite-Brite mixed with the sadder parts of the early 2000's",
+    source:"-Surprisinly apt analysis",
+    start_placement: 45,
+  },
+  {
+    quote:"Good job! I thought all these years you were just huffing the paint.",
+    source:"-Close friend",
+    start_placement: 50,
+  },
+  {
+    quote:"#SLaYYAYYYY",
+    source:"-Try not to acknowledge this person",
+    start_placement: 175,
+  },
+  
+];
+
+var randomQuote = [
+  {
+    quote:"But no, I'm the bad guy for eating the glue. At least I HAVE both my arms.",
+    source:"-Overheard conversation (probably not pertaining to the art exhibit)",
+    start_placement: 10,
+  },
+  {
+    quote:"I WANNA GO HOME!",
+    source:"-Crying child",
+    start_placement: 175,
+  },
+  {
+    quote:"What is this now? And where are we?",
+    source:"-Confused elderly woman",
+    start_placement: 175,
+  },
+  {
+    quote:"Attention: hot dogs are now $2 off at the gift shop",
+    source:"-Overhead speaker",
+    start_placement: 175,
+  },
+  {
+    quote:"...",
+    source:"-A silent room (take that how you will)",
+    start_placement: 175,
+  },
+  
+];
+
+function restart() {
+  cancelAnimationFrame(ANIM)
+  let y1 = -50;
+  let health = 1;
+  let score = 0;
+  ctx.clearRect(0,0, width ,height);
+  drawBackground(ctx, width, height);
+  assignTiles();
+  createEnemy();
+  animate()
+}
