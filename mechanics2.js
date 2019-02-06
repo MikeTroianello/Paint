@@ -21,6 +21,7 @@
 // window.onload = function() {
   window.onload = function() { 
   document.getElementById("start-button").onclick = function() {
+    cancelAnimationFrame(ANIM);
     if(!gameOn){
     playGame();
   };
@@ -29,8 +30,8 @@
 }
 
 function playGame(){
+  cancelAnimationFrame(ANIM);
   assignTiles();
-
   console.log("PLAYING")
   gameOn = true;
   score = 0;
@@ -137,7 +138,8 @@ function drawBackground(ctx, width, height) {
   ctx.fillRect(0, row*3, width, 2)
   ctx.fillRect(0, row*3.5, width, 5)
   ctx.fillRect(0, height-2, width, 2)
-  //PLAYER COLOR BAR
+  
+//PLAYER COLOR BAR
   if(player.c==1){
     ctx.fillStyle = "red";
   }
@@ -157,17 +159,22 @@ var player = {
   moveLeft:  function() { this.x -= 182},
   moveRight: function() { this.x += 182},
   fire: function() {
-    console.log("FIRE")
+    //console.log("FIRE")
     if (player.x == enemies[0].spawnPoint - 30){    
       testShooting();
-      
-      enemies.shift();
-      
-      if (enemies.length <= 0){
-        // win.play();
+
+
+      enemies.shift(); 
+      console.log(enemies)     
+      // if (enemies.length <= 2){
+      //   createEnemy()
+      // }
+     
+      if(enemies.length<=0){
         winScreen();
+        //return;
       }
-       enemies[0].y = -50;
+      enemies[0].y = -50;
     }
     else{
       console.log("MISS");
@@ -190,9 +197,11 @@ function testShooting() {
       console.log("+4")
       pop.play();
       score += 5;
+      // enemies.shift();
     }
     else{
       zoneVertical = 0;
+      // enemies.shift();
       sludge(zone, zoneVertical);
     }
   }
@@ -201,9 +210,11 @@ function testShooting() {
       console.log("+3")
       pop.play();
       score += 4;
+      // enemies.shift();
     }
     else{
       zoneVertical = 1;
+      // enemies.shift();
       sludge(zone, zoneVertical)
     }
   }
@@ -212,15 +223,18 @@ function testShooting() {
       console.log("+2")
       pop.play();
       score += 3;
+      // enemies.shift();
     }
     else{
       zoneVertical = 2;
+      // enemies.shift();
       sludge(zone, zoneVertical);
     }
   }
   else{
     console.log("+1");
     sludgePop.play();
+    //enemies.shift();
     score ++;
   }
 }
@@ -290,13 +304,9 @@ document.onkeydown = function(e) {
       player.c=3;
       switchSound.play();
       break;
-
-
-
   }
   updateCanvas();
 }
-
 
 
 //ENEMIES
@@ -311,21 +321,19 @@ class Enemy{
 }
 
 function createEnemy() {
-  for(let i = 0; i<5; i++){
+  for(let i = 0; i<10; i++){
   let randomColor = Math.floor(Math.random() * 3)+1;
   let randomSpawn= Math.floor(Math.random() * 5) * 182 + 85;
   
   enemies.push(new Enemy(randomColor, randomSpawn))
   }
-  console.log(enemies)
 }
 
 function drawEnemy () {
   //console.log(enemies)
   if(!enemies[0]){ return; }
-   enemies[0].y += 1.5;
+   enemies[0].y += 1.55;
    actionCtx.beginPath();
-   // actionCtx.fillStyle="red;"
    actionCtx.arc(enemies[0].spawnPoint, enemies[0].y, 40, 270, 360);
    actionCtx.fill()
    actionCtx.stroke();
@@ -364,6 +372,7 @@ function animate(){
   clearCanvas();
   draw(player);
   drawEnemy();
+
   ANIM = window.requestAnimationFrame(animate);
 }
 
@@ -373,6 +382,7 @@ function updateCanvas(){
 }
 
 function loseScreen() {
+  cancelAnimationFrame(ANIM);
   lose.play();
   health=1;
   enemies = [];
@@ -390,7 +400,7 @@ function loseScreen() {
   ctx.fillText("" + score, 480, 400)}, 1200);
   assignTiles();
   gameOn = false;
-  //playGame();
+  
 };
 
 
@@ -399,7 +409,7 @@ function winScreen () {
   health=1;
   enemies = [];
   ctx.clearRect(0,0, width ,height);
-  actionCtx.clearRect(0,0, width ,height);ctx.clearRect(0,0, width ,height);
+  actionCtx.clearRect(0,0, width ,height);
   ctx.fillStyle = "#000";
   ctx.fillRect(0,0, width ,height);
   ctx.font = "90px monospace";
@@ -410,11 +420,28 @@ function winScreen () {
   setInterval(function(){}, 3000);ctx.fillText("Your final Score: ", 150,300);
   window.setTimeout(function(){
   ctx.fillText("" + score, 480, 400)}, 1000);
-  assignTiles();
+  isGame=false;
   finalGrade();
-  
-  restart();
-  }
+  // document.onkeydown = function(e) {
+  //   if (e.keyCode == 32 && e.target == document.body) {
+  //     e.preventDefault();
+  //   }
+  //   switch (e.keyCode) {
+  //     case 39: 
+  //       restart();
+  //       break;
+  //     }
+  // }
+}
+
+
+// $('body').on('keyup', function(){
+//   if(!gameOn){
+//     console.log('restart')
+//     restart()
+//     gameOn = true; 
+//   }
+// })
 
 function finalGrade() {
   var critique = [];
@@ -427,13 +454,13 @@ function finalGrade() {
     if(score <= 0) {
       critique= badScore;
     }
-    else if(score > 0 && score <= 10)  {
+    else if(score > 0 && score <= 20)  {
       critique=lowScore;
     }
-    else if(score > 10 && score <= 20)  {
+    else if(score > 20 && score <= 40)  {
       critique=goodScore;
     }
-    else if(score > 20)  {
+    else if(score > 40)  {
       critique=highScore;
     }
   }
@@ -450,9 +477,9 @@ function finalGrade() {
      ctx.font = "16px monospace";
      ctx.fillText(critique[rq].source, 200, 550)}, 5500);
 
-  window.setTimeout(function(){
-      ctx.font = "25px monospace";
-      ctx.fillText("Press any key to continue", 50, 650)}, 5500);
+  // window.setTimeout(function(){
+  //     ctx.font = "25px monospace";
+  //     ctx.fillText("Thanks for Playing!", 50, 650)}, 5500);
  }
 
 
@@ -604,14 +631,16 @@ var randomQuote = [
   
 ];
 
-function restart() {
-  cancelAnimationFrame(ANIM)
-  let y1 = -50;
-  let health = 1;
-  let score = 0;
-  ctx.clearRect(0,0, width ,height);
-  drawBackground(ctx, width, height);
-  assignTiles();
-  createEnemy();
-  animate()
-}
+// function restart() {
+//   cancelAnimationFrame(ANIM)
+//   enemies = [];
+//   health = 1;
+//   score = 0;
+//   draw(player);
+//   ctx.clearRect(0,0, width ,height);
+//   actionCtx.clearRect(0,0, width ,height);
+//   drawBackground(ctx, width, height);
+//   assignTiles();
+//   createEnemy();
+//   animate()
+// }
