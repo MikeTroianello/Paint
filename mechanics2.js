@@ -463,14 +463,10 @@ function drawEnemy () {
    }
    if(enemies[0].y >= 532) {
     targetHit.play();
-    health--;
     score --;
-    enemies.shift()
-    enemies[0].y=-50;
-  }
-  if (health<=0){
-      loseScreen();
-  }   
+    enemies = 0;
+    loseScreen();
+    }   
 }
 
 function clearCanvas() {
