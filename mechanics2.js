@@ -1,4 +1,3 @@
-
   let canvas = document.getElementById('background');
   let actionCanvas = document.getElementById('main');
   let ctx = canvas.getContext('2d');
@@ -115,6 +114,11 @@ function colorTiles(){
 
 //DRAW BACKGROUND
 function drawBackground(ctx, width, height) {
+  // if(enemies.length<=0 || health <=0){
+  //   ctx.fillStyle = "#000";
+  //   ctx.fillRect(0, 0, width, height)
+  // }
+  // else{
   let col = width/5;
   let row = 160;
   colorTiles();
@@ -150,6 +154,7 @@ function drawBackground(ctx, width, height) {
     ctx.fillStyle = "yellow";
   }
   ctx.fillRect(2, (row*3.5)+4, width-4, 125)
+  // }
 }
 
 //PLAYER CHARACTER
@@ -159,41 +164,151 @@ var player = {
   moveLeft:  function() { this.x -= 182},
   moveRight: function() { this.x += 182},
   fire: function() {
-    //console.log("FIRE")
-    if (player.x == enemies[0].spawnPoint - 30){    
-      testShooting();
+   // console.log("FIRE")
+    createBullet();
+
+    // if (bullets[0].x == enemies[0].spawnPoint - 15){    
+    //   if(bullets[0].y <= enemies[0].y){
+    //     testShooting();
+    //     enemies.shift(); 
+    //     console.log(enemies)
+    //     if(enemies.length<=0){
+    //       winScreen();
+    //       //return;
+    //     }
+    //     enemies[0].y = -50;
+    //   }
 
 
-      enemies.shift(); 
-      console.log(enemies)     
+           
       // if (enemies.length <= 2){
       //   createEnemy()
       // }
      
-      if(enemies.length<=0){
-        winScreen();
-        //return;
-      }
-      enemies[0].y = -50;
-    }
-    else{
-      console.log("MISS");
-      miss.play();
-      score --;
-    }
+      // if(enemies.length<=0){
+      //   winScreen();
+      //   //return;
+      // }
+      // enemies[0].y = -50;
+//     }
+//     else{
+//       console.log("MISS");
+//       miss.play();
+//       score --;
+//     }
   },
 }
 
 
+//BULLETS
+class Bullet{
+  constructor(bulletColor, bulletX){
+    this.color=bulletColor;
+    this.x=bulletX;
+    this.y=560;
+  }
+
+
+}
+
+
+var bullets = [];
+
+function createBullet(){
+  bullets.push(new Bullet(player.c, player.x+15,))
+}
+
+
+function drawBullet() {
+  if(bullets.length>0){
+   // console.log(bullets[0]);
+    
+    if (bullets[0].color == 1){
+      actionCtx.drawImage(redBullet, bullets[0].x, bullets[0].y);
+     }
+     else if (bullets[0].color == 2){
+      actionCtx.drawImage(blueBullet, bullets[0].x, bullets[0].y);
+     }
+     else if (bullets[0].color == 3){
+      actionCtx.drawImage(yellowBullet, bullets[0].x, bullets[0].y);
+     }
+
+    actionCtx.beginPath();
+    // actionCtx.arc(bullets[0].x, bullets[0].y, 3, 270, 360);
+    //  ctx.fill()
+    // actionCtx.stroke();
+    // actionCtx.drawImage(blueBullet, bullets[0].x, bullets[0].y);
+
+    bullets[0].y-=20;
+    if(bullets[0].y <= 0) {
+      bullets.shift();
+     }
+    if (bullets[0].y <= enemies[0].y && bullets[0].x == enemies[0].spawnPoint - 15){
+      testShooting();
+      bullets.shift();
+      enemies.shift();
+      if(enemies.length<=0){
+        winScreen();
+      }
+    }
+
+  }
+  else{
+    return
+  } 
+ }
+
+
+
+ var redBullet = new Image();
+ redBullet.onload = function() { 
+ }
+ redBullet.src = "/Users/miketroianello/Desktop/Project1/Red Paint/sprite_red1.png"
+
+ 
+ 
+ var blueBullet = new Image();
+ blueBullet.onload = function() { 
+ }
+ blueBullet.src = "/Users/miketroianello/Desktop/Project1/Blue Paint/sprite_blue1.png"
+
+
+ var yellowBullet = new Image();
+ yellowBullet.onload = function() { 
+ }
+ yellowBullet.src = "/Users/miketroianello/Desktop/Project1/Yellow Paint/sprite_1.png"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //SHOOTING MECHANICS
 function testShooting() {
-  console.log("TEST SHOOT")
+ // console.log("TEST SHOOT")
   let zone = (enemies[0].spawnPoint - 85)/182;
   let zoneVertical = null
-  console.log(enemies[0].y)
-  console.log(enemies, player, tiles)
+ // console.log(enemies[0].y)
+  //console.log(enemies, player, tiles)
   if(enemies[0].y <= 159){
-    if(enemies[0].color+player.c == tiles[zone][0].color && enemies[0].color != player.c){
+    if(enemies[0].color+bullets[0].color == tiles[zone][0].color && enemies[0].color != bullets[0].color){
       console.log("+4")
       pop.play();
       score += 5;
@@ -206,7 +321,7 @@ function testShooting() {
     }
   }
   else if(enemies[0].y > 160 && enemies[0].y <=319){
-    if(enemies[0].color+player.c == tiles[zone][1].color && enemies[0].color != player.c){
+    if(enemies[0].color+bullets[0].color == tiles[zone][1].color && enemies[0].color != bullets[0].color){
       console.log("+3")
       pop.play();
       score += 4;
@@ -219,7 +334,7 @@ function testShooting() {
     }
   }
   else if(enemies[0].y > 320 && enemies[0].y <=479){
-    if(enemies[0].color+player.c == tiles[zone][2].color && enemies[0].color != player.c){
+    if(enemies[0].color+bullets[0].color == tiles[zone][2].color && enemies[0].color != bullets[0].color){
       console.log("+2")
       pop.play();
       score += 3;
@@ -330,9 +445,8 @@ function createEnemy() {
 }
 
 function drawEnemy () {
-  //console.log(enemies)
-  if(!enemies[0]){ return; }
-   enemies[0].y += 1.55;
+
+   enemies[0].y += 1;
    actionCtx.beginPath();
    actionCtx.arc(enemies[0].spawnPoint, enemies[0].y, 40, 270, 360);
    actionCtx.fill()
@@ -352,10 +466,7 @@ function drawEnemy () {
     health--;
     score --;
     enemies.shift()
-    enemies[0].y=-50
-
-
-
+    enemies[0].y=-50;
   }
   if (health<=0){
       loseScreen();
@@ -363,7 +474,9 @@ function drawEnemy () {
 }
 
 function clearCanvas() {
-  actionCtx.clearRect(0,0,900,690);
+  actionCtx.clearRect(0,0,width, height);
+  // ctx.clearRect(0,0,width, height);
+  // drawBackground(ctx, width, height);
 }
 
 //ANIMATION
@@ -372,7 +485,8 @@ function animate(){
   clearCanvas();
   draw(player);
   drawEnemy();
-
+  drawBullet();
+ 
   ANIM = window.requestAnimationFrame(animate);
 }
 
@@ -384,10 +498,8 @@ function updateCanvas(){
 function loseScreen() {
   cancelAnimationFrame(ANIM);
   lose.play();
-  health=1;
-  enemies = [];
   ctx.clearRect(0,0, width ,height);
-  actionCtx.clearRect(0,0, width ,height);ctx.clearRect(0,0, width ,height);
+  actionCtx.clearRect(0,0, width ,height);
   ctx.fillStyle = "#000";
   ctx.fillRect(0,0, width ,height);
   ctx.font = "120px monospace";
@@ -399,8 +511,16 @@ function loseScreen() {
   window.setTimeout(function(){
   ctx.fillText("" + score, 480, 400)}, 1200);
   assignTiles();
-  gameOn = false;
-  
+  document.onkeydown = function(e) {
+    if (e.keyCode == 32 && e.target == document.body) {
+      e.preventDefault();
+    }
+    switch (e.keyCode) {
+      case 100: 
+        restart();
+        break;
+      }
+  }
 };
 
 
@@ -420,18 +540,18 @@ function winScreen () {
   setInterval(function(){}, 3000);ctx.fillText("Your final Score: ", 150,300);
   window.setTimeout(function(){
   ctx.fillText("" + score, 480, 400)}, 1000);
-  isGame=false;
+  assignTiles();
   finalGrade();
-  // document.onkeydown = function(e) {
-  //   if (e.keyCode == 32 && e.target == document.body) {
-  //     e.preventDefault();
-  //   }
-  //   switch (e.keyCode) {
-  //     case 39: 
-  //       restart();
-  //       break;
-  //     }
-  // }
+  document.onkeydown = function(e) {
+    if (e.keyCode == 32 && e.target == document.body) {
+      e.preventDefault();
+    }
+    switch (e.keyCode) {
+      case 100: 
+        restart();
+        break;
+      }
+  }
 }
 
 
@@ -470,12 +590,12 @@ function finalGrade() {
     ctx.fillText("What the people say:", 130, 460)}, 2000);
  
   window.setTimeout(function(){
-     ctx.font = "20px monospace";
-     ctx.fillText(critique[rq].quote, critique[rq].start_placement, 520)}, 3500);
+    ctx.font = "20px monospace";
+    ctx.fillText(critique[rq].quote, critique[rq].start_placement, 520)}, 3500);
  
   window.setTimeout(function(){
-     ctx.font = "16px monospace";
-     ctx.fillText(critique[rq].source, 200, 550)}, 5500);
+    ctx.font = "16px monospace";
+    ctx.fillText(critique[rq].source, 200, 550)}, 5500);
 
   // window.setTimeout(function(){
   //     ctx.font = "25px monospace";
@@ -513,7 +633,6 @@ var badScore = [
 
 
 ];
-
 
 var lowScore = [
   {
