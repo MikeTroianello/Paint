@@ -15,6 +15,7 @@
   var win = new Audio('win.wav');
   var lose = new Audio('lose.wav');
   let gameOn = false;
+  let endIt = 0;
 
   // audio.play();
 
@@ -168,35 +169,6 @@ var player = {
    // console.log("FIRE")
     createBullet();
 
-    // if (bullets[0].x == enemies[0].spawnPoint - 15){    
-    //   if(bullets[0].y <= enemies[0].y){
-    //     testShooting();
-    //     enemies.shift(); 
-    //     console.log(enemies)
-    //     if(enemies.length<=0){
-    //       winScreen();
-    //       //return;
-    //     }
-    //     enemies[0].y = -50;
-    //   }
-
-
-           
-      // if (enemies.length <= 2){
-      //   createEnemy()
-      // }
-     
-      // if(enemies.length<=0){
-      //   winScreen();
-      //   //return;
-      // }
-      // enemies[0].y = -50;
-//     }
-//     else{
-//       console.log("MISS");
-//       miss.play();
-//       score --;
-//     }
   },
 }
 
@@ -370,10 +342,18 @@ function sludge(zone, zoneVertical){
 var img = new Image();
 img.onload = function() { 
 }
-img.src = "STICKMAN.png"
+if (endIt>0){
+img.src = "Character_2.png"
+}
+else {
+console.log("!!!!!!!!!")
+img.src = "Character_1.png"
+}
 function draw(player) {
-  ctx.drawImage(img, player.x, 575, 60, 100); 
+  console.log(player)
+  ctx.drawImage(img, player.x-17, 565, 90, 120); 
 } 
+
 
 //PLAYER MOVEMENTS
 document.onkeydown = function(e) {
@@ -491,6 +471,11 @@ function drawEnemy () {
       score --;
       enemies = 0;
       loseScreen();
+      // setTimeout(()=>{ //Taking it all out of scope 
+      //   window.cancelAnimationFrame(ANIM)
+      //   loseScreen();
+      // },0)
+      
       }  
   }
   else{
@@ -505,23 +490,29 @@ function clearCanvas() {
 }
 
 //ANIMATION
-let ANIM; 
+var ANIM; 
 function animate(){
   clearCanvas();
   draw(player);
   drawEnemy();
   drawBullet();
- 
+  if(enemies.length<=0){
+    return;
+  }
   ANIM = window.requestAnimationFrame(animate);
 }
-
 function updateCanvas(){
   ctx.clearRect(0,0, width ,height);
   drawBackground(ctx, width, height);
 }
 
 function loseScreen() {
-  cancelAnimationFrame(ANIM);
+  
+  console.log(ANIM)
+
+  enemies = [];
+  endIt = 1;
+  //cancelAnimationFrame(ANIM);
   lose.play();
   ctx.clearRect(0,0, width ,height);
   actionCtx.clearRect(0,0, width ,height);
@@ -542,7 +533,7 @@ function loseScreen() {
     }
     switch (e.keyCode) {
       case 100: 
-        restart();
+        //restart();
         break;
       }
   }
@@ -550,14 +541,17 @@ function loseScreen() {
 
 
 function winScreen () {
+  window.cancelAnimationFrame(ANIM)
   win.play();
-  health=1;
+  endIt=1
   enemies = [];
   ctx.clearRect(0,0, width ,height);
   actionCtx.clearRect(0,0, width ,height);
   ctx.fillStyle = "#000";
+  // actionCtx.fillStyle = "#000";
   ctx.fillRect(0,0, width ,height);
-  ctx.font = "90px monospace";
+  // actionCtx.fillRect(0,0, width ,height);
+  ctx.font = "100px monospace";
   ctx.fillStyle = "blue";
   ctx.fillText("LEVEL COMPLETE!", 50,200);
   ctx.fillStyle = "white";
@@ -778,16 +772,16 @@ var randomQuote = [
   
 ];
 
-function restart() {
-  cancelAnimationFrame(ANIM)
-  enemies = [];
-  health = 1;
-  score = 0;
-  draw(player);
-  ctx.clearRect(0,0, width ,height);
-  actionCtx.clearRect(0,0, width ,height);
-  drawBackground(ctx, width, height);
-  assignTiles();
-  createEnemy();
-  animate()
-}
+// function restart() {
+//   cancelAnimationFrame(ANIM)
+//   enemies = [];
+//   health = 1;
+//   score = 0;
+//   draw(player);
+//   ctx.clearRect(0,0, width ,height);
+//   actionCtx.clearRect(0,0, width ,height);
+//   drawBackground(ctx, width, height);
+//   assignTiles();
+//   createEnemy();
+//   animate()
+// }
