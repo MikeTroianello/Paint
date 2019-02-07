@@ -233,25 +233,21 @@ function drawBullet() {
       actionCtx.drawImage(yellowBullet, bullets[0].x, bullets[0].y);
      }
 
-    actionCtx.beginPath();
-    // actionCtx.arc(bullets[0].x, bullets[0].y, 3, 270, 360);
-    //  ctx.fill()
-    // actionCtx.stroke();
-    // actionCtx.drawImage(blueBullet, bullets[0].x, bullets[0].y);
-
+   // actionCtx.beginPath();
     bullets[0].y-=20;
     if(bullets[0].y <= 0) {
       bullets.shift();
+      console.log(bullets)
+      return
      }
     if (bullets[0].y <= enemies[0].y && bullets[0].x == enemies[0].spawnPoint - 15){
       testShooting();
-      bullets.shift();
       enemies.shift();
+      bullets.shift();
       if(enemies.length<=0){
         winScreen();
       }
     }
-
   }
   else{
     return
@@ -445,7 +441,7 @@ function createEnemy() {
 }
 
 function drawEnemy () {
-
+  if(enemies.length>0){
    enemies[0].y += 1;
    actionCtx.beginPath();
    actionCtx.arc(enemies[0].spawnPoint, enemies[0].y, 40, 270, 360);
@@ -466,7 +462,11 @@ function drawEnemy () {
     score --;
     enemies = 0;
     loseScreen();
-    }   
+    }  
+  }
+  else{
+    return
+  } 
 }
 
 function clearCanvas() {
@@ -536,7 +536,7 @@ function winScreen () {
   setInterval(function(){}, 3000);ctx.fillText("Your final Score: ", 150,300);
   window.setTimeout(function(){
   ctx.fillText("" + score, 480, 400)}, 1000);
-  assignTiles();
+  //assignTiles();
   finalGrade();
   document.onkeydown = function(e) {
     if (e.keyCode == 32 && e.target == document.body) {
@@ -544,10 +544,13 @@ function winScreen () {
     }
     switch (e.keyCode) {
       case 100: 
-        restart();
+        assignTiles();
+        createEnemy();
         break;
       }
+      return;
   }
+
 }
 
 
@@ -595,7 +598,7 @@ function finalGrade() {
 
   // window.setTimeout(function(){
   //     ctx.font = "25px monospace";
-  //     ctx.fillText("Thanks for Playing!", 50, 650)}, 5500);
+  //     ctx.fillText("Press enter to play level 2", 50, 650)}, 5500);
  }
 
 
@@ -746,16 +749,16 @@ var randomQuote = [
   
 ];
 
-// function restart() {
-//   cancelAnimationFrame(ANIM)
-//   enemies = [];
-//   health = 1;
-//   score = 0;
-//   draw(player);
-//   ctx.clearRect(0,0, width ,height);
-//   actionCtx.clearRect(0,0, width ,height);
-//   drawBackground(ctx, width, height);
-//   assignTiles();
-//   createEnemy();
-//   animate()
-// }
+function restart() {
+  cancelAnimationFrame(ANIM)
+  enemies = [];
+  health = 1;
+  score = 0;
+  draw(player);
+  ctx.clearRect(0,0, width ,height);
+  actionCtx.clearRect(0,0, width ,height);
+  drawBackground(ctx, width, height);
+  assignTiles();
+  createEnemy();
+  animate()
+}
