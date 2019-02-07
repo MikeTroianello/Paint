@@ -260,20 +260,20 @@ function drawBullet() {
  var redBullet = new Image();
  redBullet.onload = function() { 
  }
- redBullet.src = "Red Paint/sprite_red1.png"
+ redBullet.src = "Red_Paint/sprite_red1.png"
 
  
  
  var blueBullet = new Image();
  blueBullet.onload = function() { 
  }
- blueBullet.src = "Blue Paint/sprite_blue1.png"
+ blueBullet.src = "Blue_Paint/sprite_blue1.png"
 
 
  var yellowBullet = new Image();
  yellowBullet.onload = function() { 
  }
- yellowBullet.src = "YellowPaint/sprite_1.png"
+ yellowBullet.src = "Yellow_Paint/sprite_1.png"
 
 
 
