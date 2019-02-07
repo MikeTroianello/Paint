@@ -7,13 +7,13 @@
   let y1 = -50;
   let health = 1;
   let score = 0;
-  var pop = new Audio("/Users/miketroianello/Desktop/Project1/pop.wav");
-  var sludgePop = new Audio('/Users/miketroianello/Desktop/Project1/sludge-pop.wav');
-  var miss = new Audio('/Users/miketroianello/Desktop/Project1/miss.flac');
+  var pop = new Audio("pop.wav");
+  var sludgePop = new Audio('sludge-pop.wav');
+  var miss = new Audio('miss.flac');
   var switchSound = new Audio('switch.wav');
   var targetHit = new Audio('targetHit.wav');
-  var win = new Audio('/Users/miketroianello/Desktop/Project1/win.wav');
-  var lose = new Audio('/Users/miketroianello/Desktop/Project1/lose.wav');
+  var win = new Audio('win.wav');
+  var lose = new Audio('lose.wav');
   let gameOn = false;
 
   // audio.play();
@@ -260,20 +260,20 @@ function drawBullet() {
  var redBullet = new Image();
  redBullet.onload = function() { 
  }
- redBullet.src = "/Users/miketroianello/Desktop/Project1/Red Paint/sprite_red1.png"
+ redBullet.src = "Red Paint/sprite_red1.png"
 
  
  
  var blueBullet = new Image();
  blueBullet.onload = function() { 
  }
- blueBullet.src = "/Users/miketroianello/Desktop/Project1/Blue Paint/sprite_blue1.png"
+ blueBullet.src = "Blue Paint/sprite_blue1.png"
 
 
  var yellowBullet = new Image();
  yellowBullet.onload = function() { 
  }
- yellowBullet.src = "/Users/miketroianello/Desktop/Project1/Yellow Paint/sprite_1.png"
+ yellowBullet.src = "YellowPaint/sprite_1.png"
 
 
 
@@ -369,7 +369,7 @@ function sludge(zone, zoneVertical){
 var img = new Image();
 img.onload = function() { 
 }
-img.src = "/Users/miketroianello/Desktop/Project1/STICKMAN.png"
+img.src = "STICKMAN.png"
 function draw(player) {
   ctx.drawImage(img, player.x, 575, 60, 100); 
 } 
