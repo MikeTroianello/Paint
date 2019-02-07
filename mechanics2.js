@@ -273,7 +273,8 @@ function drawBullet() {
  var yellowBullet = new Image();
  yellowBullet.onload = function() { 
  }
- yellowBullet.src = "Yellow_Paint/sprite_1.png"
+ yellowBullet.src = "Yellow_Paint/sprite_yellow1.png"
+
 
 
 
