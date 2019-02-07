@@ -15,6 +15,7 @@
   var win = new Audio('/Users/miketroianello/Desktop/Project1/win.wav');
   var lose = new Audio('/Users/miketroianello/Desktop/Project1/lose.wav');
   let gameOn = false;
+
   // audio.play();
 
 // window.onload = function() {
@@ -424,9 +425,11 @@ document.onkeydown = function(e) {
 var enemies = [];
 
 class Enemy{
-  constructor(color, spawnPoint){
+  constructor(color, spawnPoint, r, grow){
     this.color=color;
     this.spawnPoint=spawnPoint;
+    this.r = r;
+    this.grow = grow;
     this.y = 0;
   }
 }
@@ -435,34 +438,59 @@ function createEnemy() {
   for(let i = 0; i<10; i++){
   let randomColor = Math.floor(Math.random() * 3)+1;
   let randomSpawn= Math.floor(Math.random() * 5) * 182 + 85;
+  r = Math.floor(Math.random() * 7)+ 37;
+  if(Math.floor(Math.random() * 2) == 1){
+    grow = true;
+  }
+  else{
+    grow = false;
+  }
   
-  enemies.push(new Enemy(randomColor, randomSpawn))
+  enemies.push(new Enemy(randomColor, randomSpawn, r, grow))
   }
 }
 
 function drawEnemy () {
   if(enemies.length>0){
-   enemies[0].y += 1;
-   actionCtx.beginPath();
-   actionCtx.arc(enemies[0].spawnPoint, enemies[0].y, 40, 270, 360);
-   actionCtx.fill()
-   actionCtx.stroke();
-   
-   if (enemies[0].color == 1){
-    actionCtx.fillStyle = 'red';
-   }
-   else if (enemies[0].color == 2){
-    actionCtx.fillStyle = 'blue';
-   }
-   else if (enemies[0].color == 3){
-    actionCtx.fillStyle = 'yellow';
-   }
-   if(enemies[0].y >= 532) {
-    targetHit.play();
-    score --;
-    enemies = 0;
-    loseScreen();
-    }  
+    console.log(enemies[0].grow)
+    console.log(enemies[0].r)
+    if(enemies[0].grow==true){
+      enemies[0].r += .15;
+      if(enemies[0].r >= 42){
+        enemies[0].grow = false;
+      }
+     
+
+    }
+    if(enemies[0].grow==false){
+      enemies[0].r -= .15;
+      enemies[0].y += .1
+      if(enemies[0].r <= 37){
+        enemies[0].grow = true;
+      }
+
+    }
+    enemies[0].y += 1;
+    actionCtx.beginPath();
+    actionCtx.arc(enemies[0].spawnPoint, enemies[0].y, enemies[0].r, 270, 360);
+    actionCtx.fill()
+    actionCtx.stroke();
+    
+    if (enemies[0].color == 1){
+      actionCtx.fillStyle = 'red';
+    }
+    else if (enemies[0].color == 2){
+      actionCtx.fillStyle = 'blue';
+    }
+    else if (enemies[0].color == 3){
+      actionCtx.fillStyle = 'yellow';
+    }
+    if(enemies[0].y >= 532) {
+      targetHit.play();
+      score --;
+      enemies = 0;
+      loseScreen();
+      }  
   }
   else{
     return
