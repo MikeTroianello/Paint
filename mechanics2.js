@@ -16,6 +16,7 @@
   var lose = new Audio('lose.wav');
   let gameOn = false;
   let endIt = 0;
+  let speedIncrease = 0;
 
   // audio.play();
 
@@ -272,6 +273,7 @@ function drawBullet() {
 
 //SHOOTING MECHANICS
 function testShooting() {
+  speedIncrease += .15;
  // console.log("TEST SHOOT")
   let zone = (enemies[0].spawnPoint - 85)/182;
   let zoneVertical = null
@@ -451,7 +453,7 @@ function drawEnemy () {
       }
 
     }
-    enemies[0].y += 1;
+    enemies[0].y += 1 + speedIncrease;
     actionCtx.beginPath();
     actionCtx.arc(enemies[0].spawnPoint, enemies[0].y, enemies[0].r, 270, 360);
     actionCtx.fill()
