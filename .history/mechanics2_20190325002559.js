@@ -501,7 +501,6 @@ function updateCanvas(){
 }
 
 function loseScreen() {
-  bullets.shift();
   gameOn=false;
   level=0
   soundtrack.pause();
@@ -545,7 +544,6 @@ function loseScreen() {
 
 
 function winScreen () {
-  bullets.shift();
   //soundtrack.pause();
   gameOn=false;
   window.cancelAnimationFrame(ANIM)

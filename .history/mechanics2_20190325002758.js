@@ -545,7 +545,6 @@ function loseScreen() {
 
 
 function winScreen () {
-  bullets.shift();
   //soundtrack.pause();
   gameOn=false;
   window.cancelAnimationFrame(ANIM)
