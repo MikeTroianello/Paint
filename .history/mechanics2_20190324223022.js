@@ -518,7 +518,8 @@ function loseScreen() {
   setInterval(function(){}, 3000);ctx.fillText("Your final Score: ", 150,300);
   window.setTimeout(function(){
   ctx.fillText("" + score, 480, 400)}, 1200);
-  ctx.font = "30px monospace";
+  ctx.fillStyle = "white";
+  ctx.font = "40px monospace";
   window.setTimeout(function(){
     ctx.fillText("(Press the start button to replay)", 100, 550)}, 2000);
   assignTiles();
