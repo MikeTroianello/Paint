@@ -28,7 +28,7 @@
   window.onload = function() { 
   document.getElementById("start-button").onclick = function() {
     //cancelAnimationFrame(ANIM);
-    if(!gameOn && restart){
+    if(!gameOn){
     playGame();
   };
 };
@@ -38,7 +38,6 @@
 
 
 function playGame(){
-  restart=false
   cancelAnimationFrame(ANIM);
   soundtrack.play();
   assignTiles();
@@ -503,7 +502,6 @@ function updateCanvas(){
 }
 
 function loseScreen() {
-  gameOn=false;
   level=0
   soundtrack.pause();
   // console.log(ANIM)
@@ -528,7 +526,7 @@ function loseScreen() {
   window.setTimeout(function(){
     ctx.fillText("(Press the start button to replay)", 100, 550)}, 2000);
   assignTiles();
-  window.setTimeout(function(){restart=true}, 2000);
+  window.setTimeout(function(){gameOn=false;}, 2000);
   assignTiles();
  
 
@@ -560,7 +558,7 @@ function winScreen () {
   // actionCtx.fillRect(0,0, width ,height);
   ctx.font = "80px monospace";
   ctx.fillStyle = "blue";
-  ctx.fillText(`LEVEL ${level} COMPLETE!`, 15, 200);
+  ctx.fillText(`LEVEL ${level} COMPLETE!`, 10,200);
   //50
   ctx.fillStyle = "white";
   ctx.font = "50px monospace";

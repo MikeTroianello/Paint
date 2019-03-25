@@ -20,7 +20,6 @@
   var soundtrack = new Audio('Soundtrack.wav');
   soundtrack.loop = true;
   let level = 0;
-  let restart=true
 
   // audio.play();
 
@@ -28,7 +27,7 @@
   window.onload = function() { 
   document.getElementById("start-button").onclick = function() {
     //cancelAnimationFrame(ANIM);
-    if(!gameOn && restart){
+    if(!gameOn){
     playGame();
   };
 };
@@ -38,7 +37,6 @@
 
 
 function playGame(){
-  restart=false
   cancelAnimationFrame(ANIM);
   soundtrack.play();
   assignTiles();
@@ -503,8 +501,7 @@ function updateCanvas(){
 }
 
 function loseScreen() {
-  gameOn=false;
-  level=0
+  level=1
   soundtrack.pause();
   // console.log(ANIM)
   speedIncrease = 0;
@@ -528,7 +525,7 @@ function loseScreen() {
   window.setTimeout(function(){
     ctx.fillText("(Press the start button to replay)", 100, 550)}, 2000);
   assignTiles();
-  window.setTimeout(function(){restart=true}, 2000);
+  window.setTimeout(function(){gameOn=false;}, 2000);
   assignTiles();
  
 
@@ -547,7 +544,6 @@ function loseScreen() {
 
 function winScreen () {
   //soundtrack.pause();
-  gameOn=false;
   window.cancelAnimationFrame(ANIM)
   win.play();
   endIt=1
@@ -558,9 +554,9 @@ function winScreen () {
   // actionCtx.fillStyle = "#000";
   ctx.fillRect(0,0, width ,height);
   // actionCtx.fillRect(0,0, width ,height);
-  ctx.font = "80px monospace";
+  ctx.font = "90px monospace";
   ctx.fillStyle = "blue";
-  ctx.fillText(`LEVEL ${level} COMPLETE!`, 15, 200);
+  ctx.fillText(`LEVEL ${level} COMPLETE!`, 0,200);
   //50
   ctx.fillStyle = "white";
   ctx.font = "50px monospace";
@@ -630,9 +626,9 @@ function finalGrade() {
 
   window.setTimeout(function(){
       ctx.font = "25px monospace";
-      ctx.fillText(`(Press the start button to play level ${level+1})`, 50, 645)}, 7200);
+      ctx.fillText("(Press the start button to play the next level)", 50, 645)}, 7200);
 
-      window.setTimeout(function(){restart=true}, 7200);
+      window.setTimeout(function(){gameOn=false}, 7200);
       
  }
 
