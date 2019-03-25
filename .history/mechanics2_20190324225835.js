@@ -394,7 +394,7 @@ document.onkeydown = function(e) {
       break;
   }
   updateCanvas();
-}}}
+}
 
 
 //ENEMIES

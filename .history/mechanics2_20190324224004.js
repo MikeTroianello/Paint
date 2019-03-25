@@ -351,8 +351,7 @@ function draw(player) {
 
 //PLAYER MOVEMENTS
 document.onkeydown = function(e) {
-  if(gameOn){
-    {if (e.keyCode == 32 && e.target == document.body) {
+  if (e.keyCode == 32 && e.target == document.body) {
     e.preventDefault();
   }
   switch (e.keyCode) {
@@ -394,7 +393,7 @@ document.onkeydown = function(e) {
       break;
   }
   updateCanvas();
-}}}
+}
 
 
 //ENEMIES
@@ -527,16 +526,16 @@ function loseScreen() {
 
   gameOn=false;
 
-  // document.onkeydown = function(e) {
-  //   // if (e.keyCode == 32 && e.target == document.body) {
-  //   //   e.preventDefault();
-  //   // }
-  //   switch (e.keyCode) {
-  //     case 32: 
-  //       playGame();
-  //       break;
-  //     }
-  // }
+  document.onkeydown = function(e) {
+    if (e.keyCode == 32 && e.target == document.body) {
+      e.preventDefault();
+    }
+    switch (e.keyCode) {
+      case 32: 
+        playGame();
+        break;
+      }
+  }
 };
 
 

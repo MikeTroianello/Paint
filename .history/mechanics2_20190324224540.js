@@ -351,8 +351,10 @@ function draw(player) {
 
 //PLAYER MOVEMENTS
 document.onkeydown = function(e) {
-  if(gameOn){
-    {if (e.keyCode == 32 && e.target == document.body) {
+  if(!gameOn){
+    break;
+  }
+  else {if (e.keyCode == 32 && e.target == document.body) {
     e.preventDefault();
   }
   switch (e.keyCode) {
@@ -394,7 +396,7 @@ document.onkeydown = function(e) {
       break;
   }
   updateCanvas();
-}}}
+}}
 
 
 //ENEMIES
