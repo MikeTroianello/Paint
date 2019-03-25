@@ -19,7 +19,7 @@
   let speedIncrease = 0;
   var soundtrack = new Audio('Soundtrack.wav');
   soundtrack.loop = true;
-  let level = 1;
+  
 
   // audio.play();
 
@@ -340,6 +340,7 @@ if (endIt>0){
 img.src = "Character_2.png"
 }
 else {
+console.log("!!!!!!!!!")
 img.src = "Character_1.png"
 }
 function draw(player) {
@@ -500,7 +501,6 @@ function updateCanvas(){
 }
 
 function loseScreen() {
-  level=1
   soundtrack.pause();
   // console.log(ANIM)
   speedIncrease = 0;
@@ -524,9 +524,8 @@ function loseScreen() {
   window.setTimeout(function(){
     ctx.fillText("(Press the start button to replay)", 100, 550)}, 2000);
   assignTiles();
-  window.setTimeout(function(){gameOn=false;}, 2000);
-  assignTiles();
- 
+
+  gameOn=false;
 
   // document.onkeydown = function(e) {
   //   // if (e.keyCode == 32 && e.target == document.body) {
@@ -563,19 +562,18 @@ function winScreen () {
   ctx.fillText("" + score, 480, 400)}, 1000);
   //assignTiles();
   finalGrade();
-  gameOn=false;   
-  // document.onkeydown = function(e) {
-  //   if (e.keyCode == 32 && e.target == document.body) {
-  //     e.preventDefault();
-  //   }
-  //   switch (e.keyCode) {
-  //     case 100: 
-  //       assignTiles();
-  //       createEnemy();
-  //       break;
-  //     }
-  //     return;
-  // }
+  document.onkeydown = function(e) {
+    if (e.keyCode == 32 && e.target == document.body) {
+      e.preventDefault();
+    }
+    switch (e.keyCode) {
+      case 100: 
+        assignTiles();
+        createEnemy();
+        break;
+      }
+      return;
+  }
 
 }
 
@@ -624,9 +622,9 @@ function finalGrade() {
 
   window.setTimeout(function(){
       ctx.font = "25px monospace";
-      ctx.fillText("(Press the start button to play the next level)", 50, 645)}, 7200);
+      ctx.fillText("Press the start button to play level 2", 50, 600)}, 5500);
 
- 
+  gameOn=false;    
  }
 
 

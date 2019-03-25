@@ -524,7 +524,7 @@ function loseScreen() {
   window.setTimeout(function(){
     ctx.fillText("(Press the start button to replay)", 100, 550)}, 2000);
   assignTiles();
-  window.setTimeout(function(){gameOn=false;}, 2000);
+  window.setTimeout(function(){ gameOn=false;}, 2000);
   assignTiles();
  
 

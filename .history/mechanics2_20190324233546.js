@@ -524,9 +524,8 @@ function loseScreen() {
   window.setTimeout(function(){
     ctx.fillText("(Press the start button to replay)", 100, 550)}, 2000);
   assignTiles();
-  window.setTimeout(function(){gameOn=false;}, 2000);
-  assignTiles();
- 
+
+  gameOn=false;
 
   // document.onkeydown = function(e) {
   //   // if (e.keyCode == 32 && e.target == document.body) {
