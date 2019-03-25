@@ -500,7 +500,7 @@ function updateCanvas(){
 
 function loseScreen() {
   soundtrack.pause();
-  // console.log(ANIM)
+  console.log(ANIM)
   speedIncrease = 0;
   enemies = [];
   endIt = 1;

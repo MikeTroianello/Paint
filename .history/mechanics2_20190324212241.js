@@ -500,8 +500,8 @@ function updateCanvas(){
 
 function loseScreen() {
   soundtrack.pause();
-  // console.log(ANIM)
-  speedIncrease = 0;
+  console.log(ANIM)
+
   enemies = [];
   endIt = 1;
   //cancelAnimationFrame(ANIM);

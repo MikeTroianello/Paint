@@ -16,7 +16,7 @@
   var lose = new Audio('lose.wav');
   let gameOn = false;
   let endIt = 0;
-  let speedIncrease = 0;
+  // let speedIncrease = 0;
   var soundtrack = new Audio('Soundtrack.wav');
   
 
@@ -36,6 +36,7 @@
 
 
 function playGame(){
+  let speedIncrease = 0;
   cancelAnimationFrame(ANIM);
   soundtrack.play();
   assignTiles();
@@ -500,8 +501,8 @@ function updateCanvas(){
 
 function loseScreen() {
   soundtrack.pause();
-  // console.log(ANIM)
-  speedIncrease = 0;
+  console.log(ANIM)
+
   enemies = [];
   endIt = 1;
   //cancelAnimationFrame(ANIM);

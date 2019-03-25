@@ -25,7 +25,7 @@
 // window.onload = function() {
   window.onload = function() { 
   document.getElementById("start-button").onclick = function() {
-    //cancelAnimationFrame(ANIM);
+    cancelAnimationFrame(ANIM);
     if(!gameOn){
     playGame();
   };
@@ -33,7 +33,12 @@
 
 }
 
-
+myAudio = new Audio('someSound.ogg'); 
+myAudio.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
+myAudio.play();
 
 function playGame(){
   cancelAnimationFrame(ANIM);
@@ -426,6 +431,7 @@ function createEnemy() {
 
 function drawEnemy () {
   if(enemies.length>0){
+    console.log(enemies[0].grow)
     console.log(enemies[0].r)
     if(enemies[0].grow==true){
       enemies[0].r += .15;
@@ -500,8 +506,8 @@ function updateCanvas(){
 
 function loseScreen() {
   soundtrack.pause();
-  // console.log(ANIM)
-  speedIncrease = 0;
+  console.log(ANIM)
+
   enemies = [];
   endIt = 1;
   //cancelAnimationFrame(ANIM);
@@ -519,19 +525,16 @@ function loseScreen() {
   window.setTimeout(function(){
   ctx.fillText("" + score, 480, 400)}, 1200);
   assignTiles();
-
-  gameOn=false;
-
-  // document.onkeydown = function(e) {
-  //   if (e.keyCode == 32 && e.target == document.body) {
-  //     e.preventDefault();
-  //   }
-  //   switch (e.keyCode) {
-  //     case 100: 
-  //       //restart();
-  //       break;
-  //     }
-  // }
+  document.onkeydown = function(e) {
+    if (e.keyCode == 32 && e.target == document.body) {
+      e.preventDefault();
+    }
+    switch (e.keyCode) {
+      case 100: 
+        //restart();
+        break;
+      }
+  }
 };
 
 

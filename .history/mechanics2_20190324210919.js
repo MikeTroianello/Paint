@@ -426,6 +426,7 @@ function createEnemy() {
 
 function drawEnemy () {
   if(enemies.length>0){
+    console.log(enemies[0].grow)
     console.log(enemies[0].r)
     if(enemies[0].grow==true){
       enemies[0].r += .15;
@@ -500,8 +501,8 @@ function updateCanvas(){
 
 function loseScreen() {
   soundtrack.pause();
-  // console.log(ANIM)
-  speedIncrease = 0;
+  console.log(ANIM)
+
   enemies = [];
   endIt = 1;
   //cancelAnimationFrame(ANIM);
