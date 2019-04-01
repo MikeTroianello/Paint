@@ -17,7 +17,7 @@
   let gameOn = false;
   let endIt = 0;
   let speedIncrease = 0;
-  var soundtrack = new Audio('Soundtrack.wav');
+  var soundtrack = new Audio('Soundtrack_mp3.mp3')
   soundtrack.loop = true;
   let level = 0;
   let restart=true
@@ -145,11 +145,6 @@ function colorTiles(){
 
 //DRAW BACKGROUND
 function drawBackground(ctx, width, height) {
-  // if(enemies.length<=0 || health <=0){
-  //   ctx.fillStyle = "#000";
-  //   ctx.fillRect(0, 0, width, height)
-  // }
-  // else{
   let col = width/5;
   let row = 160;
   colorTiles();
@@ -174,7 +169,7 @@ function drawBackground(ctx, width, height) {
   ctx.fillRect(0, row*3.5, width, 5)
   ctx.fillRect(0, height-2, width, 2)
   
-//PLAYER COLOR BAR
+  //PLAYER COLOR BAR
   if(player.c==1){
     ctx.fillStyle = "red";
   }
@@ -185,7 +180,6 @@ function drawBackground(ctx, width, height) {
     ctx.fillStyle = "yellow";
   }
   ctx.fillRect(2, (row*3.5)+4, width-4, 125)
-  // }
 }
 
 //PLAYER CHARACTER
@@ -195,9 +189,7 @@ var player = {
   moveLeft:  function() { this.x -= 182},
   moveRight: function() { this.x += 182},
   fire: function() {
-   // console.log("FIRE")
     createBullet();
-
   },
 }
 
@@ -212,6 +204,8 @@ class Bullet{
 }
 
 
+//CREATE BULLETS
+
 var bullets = [];
 
 function createBullet(){
@@ -221,7 +215,6 @@ function createBullet(){
 
 function drawBullet() {
   if(bullets.length>0){
-   // console.log(bullets[0]);
     
     if (bullets[0].color == 1){
       actionCtx.drawImage(redBullet, bullets[0].x, bullets[0].y);
@@ -233,7 +226,6 @@ function drawBullet() {
       actionCtx.drawImage(yellowBullet, bullets[0].x, bullets[0].y);
      }
 
-   // actionCtx.beginPath();
     bullets[0].y-=20;
     if(bullets[0].y <= 0) {
       bullets.shift();
@@ -285,21 +277,17 @@ function drawBullet() {
 //SHOOTING MECHANICS
 function testShooting() {
   speedIncrease += .15;
- // console.log("TEST SHOOT")
   let zone = (enemies[0].spawnPoint - 85)/182;
   let zoneVertical = null
- // console.log(enemies[0].y)
-  //console.log(enemies, player, tiles)
+
   if(enemies[0].y <= 159){
     if(enemies[0].color+bullets[0].color == tiles[zone][0].color && enemies[0].color != bullets[0].color){
       console.log("+4")
       pop.play();
       score += 5;
-      // enemies.shift();
     }
     else{
       zoneVertical = 0;
-      // enemies.shift();
       sludge(zone, zoneVertical);
     }
   }
@@ -308,11 +296,9 @@ function testShooting() {
       console.log("+3")
       pop.play();
       score += 4;
-      // enemies.shift();
     }
     else{
       zoneVertical = 1;
-      // enemies.shift();
       sludge(zone, zoneVertical)
     }
   }
@@ -321,18 +307,15 @@ function testShooting() {
       console.log("+2")
       pop.play();
       score += 3;
-      // enemies.shift();
     }
     else{
       zoneVertical = 2;
-      // enemies.shift();
       sludge(zone, zoneVertical);
     }
   }
   else{
     console.log("+1");
     sludgePop.play();
-    //enemies.shift();
     score ++;
   }
 }
