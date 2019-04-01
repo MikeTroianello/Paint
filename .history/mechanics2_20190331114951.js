@@ -40,6 +40,7 @@ function playGame(){
   cancelAnimationFrame(ANIM);
   soundtrack.play();
   assignTiles();
+  console.log("PLAYING")
   gameOn = true;
   level ++;
   score = 0;
@@ -49,28 +50,6 @@ function playGame(){
   animate();
   }
 
-
-
-//ANIMATION
-var ANIM; 
-function animate(){
-  clearCanvas();
-  draw(player);
-  drawEnemy();
-  drawBullet();
-  if(enemies.length<=0){
-    return;
-  }
-  ANIM = window.requestAnimationFrame(animate);
-}
-function updateCanvas(){
-  ctx.clearRect(0,0, width ,height);
-  drawBackground(ctx, width, height);
-}
-
-
-
-  
 //TILES
 var tiles = [];
 
@@ -483,6 +462,11 @@ function drawEnemy () {
       score --;
       enemies = 0;
       loseScreen();
+      // setTimeout(()=>{ //Taking it all out of scope 
+      //   window.cancelAnimationFrame(ANIM)
+      //   loseScreen();
+      // },0)
+      
       }  
   }
   else{
@@ -492,18 +476,37 @@ function drawEnemy () {
 
 function clearCanvas() {
   actionCtx.clearRect(0,0,width, height);
+  // ctx.clearRect(0,0,width, height);
+  // drawBackground(ctx, width, height);
 }
 
-
+//ANIMATION
+var ANIM; 
+function animate(){
+  clearCanvas();
+  draw(player);
+  drawEnemy();
+  drawBullet();
+  if(enemies.length<=0){
+    return;
+  }
+  ANIM = window.requestAnimationFrame(animate);
+}
+function updateCanvas(){
+  ctx.clearRect(0,0, width ,height);
+  drawBackground(ctx, width, height);
+}
 
 function loseScreen() {
   bullets.shift();
   gameOn=false;
   level=0
   soundtrack.pause();
+  // console.log(ANIM)
   speedIncrease = 0;
   enemies = [];
   endIt = 1;
+  //cancelAnimationFrame(ANIM);
   lose.play();
   ctx.clearRect(0,0, width ,height);
   actionCtx.clearRect(0,0, width ,height);
@@ -523,11 +526,24 @@ function loseScreen() {
   assignTiles();
   window.setTimeout(function(){restart=true}, 2000);
   assignTiles();
+ 
+
+  // document.onkeydown = function(e) {
+  //   // if (e.keyCode == 32 && e.target == document.body) {
+  //   //   e.preventDefault();
+  //   // }
+  //   switch (e.keyCode) {
+  //     case 32: 
+  //       playGame();
+  //       break;
+  //     }
+  // }
 };
 
 
 function winScreen () {
   bullets.shift();
+  //soundtrack.pause();
   gameOn=false;
   window.cancelAnimationFrame(ANIM)
   win.play();
@@ -536,18 +552,44 @@ function winScreen () {
   ctx.clearRect(0,0, width ,height);
   actionCtx.clearRect(0,0, width ,height);
   ctx.fillStyle = "#000";
+  // actionCtx.fillStyle = "#000";
   ctx.fillRect(0,0, width ,height);
+  // actionCtx.fillRect(0,0, width ,height);
   ctx.font = "80px monospace";
   ctx.fillStyle = "blue";
   ctx.fillText(`LEVEL ${level} COMPLETE!`, 15, 200);
+  //50
   ctx.fillStyle = "white";
   ctx.font = "50px monospace";
   setInterval(function(){}, 3000);ctx.fillText("Your final Score: ", 150,300);
   window.setTimeout(function(){
   ctx.fillText("" + score, 480, 400)}, 1000);
+  //assignTiles();
   finalGrade();
+    
+  // document.onkeydown = function(e) {
+  //   if (e.keyCode == 32 && e.target == document.body) {
+  //     e.preventDefault();
+  //   }
+  //   switch (e.keyCode) {
+  //     case 100: 
+  //       assignTiles();
+  //       createEnemy();
+  //       break;
+  //     }
+  //     return;
+  // }
+
 }
 
+
+// $('body').on('keyup', function(){
+//   if(!gameOn){
+//     console.log('restart')
+//     restart()
+//     gameOn = true; 
+//   }
+// })
 
 function finalGrade() {
   var critique = [];
@@ -738,3 +780,17 @@ var randomQuote = [
   },
   
 ];
+
+// function restart() {
+//   cancelAnimationFrame(ANIM)
+//   enemies = [];
+//   health = 1;
+//   score = 0;
+//   draw(player);
+//   ctx.clearRect(0,0, width ,height);
+//   actionCtx.clearRect(0,0, width ,height);
+//   drawBackground(ctx, width, height);
+//   assignTiles();
+//   createEnemy();
+//   animate()
+// }
