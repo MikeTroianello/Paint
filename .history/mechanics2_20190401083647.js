@@ -30,6 +30,7 @@ window.onload = function() {
 }
 
 
+
 function playGame(){
   restart=false
   soundtrack.play();
@@ -80,6 +81,7 @@ class Tile {
     this.finishX=finishX;
   }
 }
+
 
 
 function assignTiles() {
@@ -320,6 +322,7 @@ img.onload = function() {
 }
 img.src = "Character_1.png"
 function draw(player) {
+  console.log(player)
   ctx.drawImage(img, player.x-17, 565, 90, 120); 
 } 
 
@@ -403,6 +406,7 @@ function createEnemy() {
 
 function drawEnemy () {
   if(enemies.length>0){
+    console.log(enemies[0].r)
     if(enemies[0].grow==true){
       enemies[0].r += .15;
       if(enemies[0].r >= 42){
@@ -536,7 +540,7 @@ function finalGrade() {
     ctx.font = "25px monospace";
     ctx.fillText(`(Press the start button to replay level ${level+1})`, 50, 645)}, 7200);
     level --;
-    speedIncrease -= 1.4999;
+    speedIncrease -= 1.5;
     window.setTimeout(function(){restart=true}, 7200);
     } 
   

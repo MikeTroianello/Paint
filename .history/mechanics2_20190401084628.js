@@ -82,6 +82,7 @@ class Tile {
 }
 
 
+
 function assignTiles() {
   tiles = []
   for(let i=0; i<5; i++){
@@ -488,7 +489,12 @@ function winScreen () {
   ctx.font = "80px monospace";
   ctx.fillStyle = "blue";
   ctx.fillText(`LEVEL ${level} COMPLETE!`, 15, 200);
-  ctx.fillStyle = "white";
+  if(score<=0){
+    ctx.fillStyle = "red";
+  }
+  else{
+    ctx.fillStyle = "white";
+  }
   ctx.font = "50px monospace";
   setInterval(function(){}, 3000);ctx.fillText("Your final Score: ", 150,300);
   window.setTimeout(function(){

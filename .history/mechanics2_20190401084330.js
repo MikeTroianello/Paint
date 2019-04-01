@@ -30,7 +30,9 @@ window.onload = function() {
 }
 
 
+
 function playGame(){
+  console.log(speedIncrease)
   restart=false
   soundtrack.play();
   assignTiles();
@@ -80,6 +82,7 @@ class Tile {
     this.finishX=finishX;
   }
 }
+
 
 
 function assignTiles() {

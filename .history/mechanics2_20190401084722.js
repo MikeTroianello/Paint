@@ -82,6 +82,7 @@ class Tile {
 }
 
 
+
 function assignTiles() {
   tiles = []
   for(let i=0; i<5; i++){

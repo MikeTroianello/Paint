@@ -5,6 +5,8 @@
   let height = canvas.height;
   let width = canvas.width;
   let y1 = -50;
+  let health = 1;
+  let score = 0;
   var pop = new Audio("pop.wav");
   var sludgePop = new Audio('sludge-pop.wav');
   var miss = new Audio('miss.flac');
@@ -13,11 +15,13 @@
   var win = new Audio('win.wav');
   var lose = new Audio('lose.wav');
   let gameOn = false;
+  let endIt = 0;
   let speedIncrease = 0;
   var soundtrack = new Audio('Soundtrack_mp3.mp3')
   soundtrack.loop = true;
   let level = 0;
   let restart=true
+
 
 window.onload = function() { 
   
@@ -30,8 +34,10 @@ window.onload = function() {
 }
 
 
+
 function playGame(){
   restart=false
+  cancelAnimationFrame(ANIM);
   soundtrack.play();
   assignTiles();
   gameOn = true;
@@ -44,7 +50,9 @@ function playGame(){
   }
 
 
+
 //ANIMATION
+var ANIM; 
 
 function animate(){
   clearCanvas();
@@ -54,19 +62,15 @@ function animate(){
   if(enemies.length<=0){
     return;
   }
-  window.requestAnimationFrame(animate);
+  ANIM = window.requestAnimationFrame(animate);
 }
 
-//UPDATE BACKGROUND
 function updateCanvas(){
   ctx.clearRect(0,0, width ,height);
   drawBackground(ctx, width, height);
 }
 
-//UPDATE OBJECTS
-function clearCanvas() {
-  actionCtx.clearRect(0,0,width, height);
-}
+
 
   
 //TILES
@@ -80,6 +84,7 @@ class Tile {
     this.finishX=finishX;
   }
 }
+
 
 
 function assignTiles() {
@@ -226,6 +231,7 @@ function drawBullet() {
     bullets[0].y-=20;
     if(bullets[0].y <= 0) {
       bullets.shift();
+      console.log(bullets)
       return
      }
     if (bullets[0].y <= enemies[0].y && bullets[0].x == enemies[0].spawnPoint - 15){
@@ -242,20 +248,32 @@ function drawBullet() {
   } 
  }
 
+
  var redBullet = new Image();
  redBullet.onload = function() { 
  }
  redBullet.src = "Red_Paint/sprite_red1.png"
+
+ 
  
  var blueBullet = new Image();
  blueBullet.onload = function() { 
  }
  blueBullet.src = "Blue_Paint/sprite_blue1.png"
 
+
  var yellowBullet = new Image();
  yellowBullet.onload = function() { 
  }
  yellowBullet.src = "Yellow_Paint/sprite_yellow1.png"
+
+
+
+
+
+
+
+
 
 
 //SHOOTING MECHANICS
@@ -266,6 +284,7 @@ function testShooting() {
 
   if(enemies[0].y <= 159){
     if(enemies[0].color+bullets[0].color == tiles[zone][0].color && enemies[0].color != bullets[0].color){
+      console.log("+4")
       pop.play();
       score += 5;
     }
@@ -276,6 +295,7 @@ function testShooting() {
   }
   else if(enemies[0].y > 160 && enemies[0].y <=319){
     if(enemies[0].color+bullets[0].color == tiles[zone][1].color && enemies[0].color != bullets[0].color){
+      console.log("+3")
       pop.play();
       score += 4;
     }
@@ -286,6 +306,7 @@ function testShooting() {
   }
   else if(enemies[0].y > 320 && enemies[0].y <=479){
     if(enemies[0].color+bullets[0].color == tiles[zone][2].color && enemies[0].color != bullets[0].color){
+      console.log("+2")
       pop.play();
       score += 3;
     }
@@ -295,6 +316,7 @@ function testShooting() {
     }
   }
   else{
+    console.log("+1");
     sludgePop.play();
     score ++;
   }
@@ -306,7 +328,7 @@ function sludge(zone, zoneVertical){
   ctx.fillRect(tiles[zone][zoneVertical].spawnX, tiles[zone][zoneVertical].spawnY, tiles[zone][zoneVertical].finishX, 158);
   tiles[zone][zoneVertical].color = 0;
   sludgePop.play();
-  score -=2;
+  score -=4
   }
   else {
     sludgePop.play();
@@ -318,8 +340,14 @@ function sludge(zone, zoneVertical){
 var img = new Image();
 img.onload = function() { 
 }
+if (endIt>0){
+img.src = "Character_2.png"
+}
+else {
 img.src = "Character_1.png"
+}
 function draw(player) {
+  console.log(player)
   ctx.drawImage(img, player.x-17, 565, 90, 120); 
 } 
 
@@ -403,6 +431,7 @@ function createEnemy() {
 
 function drawEnemy () {
   if(enemies.length>0){
+    console.log(enemies[0].r)
     if(enemies[0].grow==true){
       enemies[0].r += .15;
       if(enemies[0].r >= 42){
@@ -446,7 +475,11 @@ function drawEnemy () {
   } 
 }
 
-//END OF THE GAME
+function clearCanvas() {
+  actionCtx.clearRect(0,0,width, height);
+}
+
+
 
 function loseScreen() {
   bullets.shift();
@@ -455,6 +488,7 @@ function loseScreen() {
   soundtrack.pause();
   speedIncrease = 0;
   enemies = [];
+  endIt = 1;
   lose.play();
   ctx.clearRect(0,0, width ,height);
   actionCtx.clearRect(0,0, width ,height);
@@ -480,7 +514,10 @@ function loseScreen() {
 function winScreen () {
   bullets.shift();
   gameOn=false;
+  window.cancelAnimationFrame(ANIM)
   win.play();
+  endIt=1
+  enemies = [];
   ctx.clearRect(0,0, width ,height);
   actionCtx.clearRect(0,0, width ,height);
   ctx.fillStyle = "#000";
@@ -531,21 +568,12 @@ function finalGrade() {
     ctx.font = "16px monospace";
     ctx.fillText(critique[rq].source, 200, 550)}, 5500);
 
-  if(score<=0){
-    window.setTimeout(function(){
-    ctx.font = "25px monospace";
-    ctx.fillText(`(Press the start button to replay level ${level+1})`, 50, 645)}, 7200);
-    level --;
-    speedIncrease -= 1.4999;
-    window.setTimeout(function(){restart=true}, 7200);
-    } 
-  
-  else{
-    window.setTimeout(function(){
-    ctx.font = "25px monospace";
-    ctx.fillText(`(Press the start button to play level ${level+1})`, 50, 645)}, 7200);
-    window.setTimeout(function(){restart=true}, 7200);
-    }
+  window.setTimeout(function(){
+      ctx.font = "25px monospace";
+      ctx.fillText(`(Press the start button to play level ${level+1})`, 50, 645)}, 7200);
+
+      window.setTimeout(function(){restart=true}, 7200);
+      
  }
 
 

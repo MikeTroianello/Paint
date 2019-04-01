@@ -5,6 +5,8 @@
   let height = canvas.height;
   let width = canvas.width;
   let y1 = -50;
+  let health = 1;
+  let score = 0;
   var pop = new Audio("pop.wav");
   var sludgePop = new Audio('sludge-pop.wav');
   var miss = new Audio('miss.flac');
@@ -19,6 +21,7 @@
   let level = 0;
   let restart=true
 
+
 window.onload = function() { 
   
   document.getElementById("start-button").onclick = function() {
@@ -28,6 +31,7 @@ window.onload = function() {
 };
 
 }
+
 
 
 function playGame(){
@@ -42,6 +46,7 @@ function playGame(){
   createEnemy();
   animate();
   }
+
 
 
 //ANIMATION
@@ -80,6 +85,7 @@ class Tile {
     this.finishX=finishX;
   }
 }
+
 
 
 function assignTiles() {
@@ -320,6 +326,7 @@ img.onload = function() {
 }
 img.src = "Character_1.png"
 function draw(player) {
+  console.log(player)
   ctx.drawImage(img, player.x-17, 565, 90, 120); 
 } 
 
@@ -403,6 +410,7 @@ function createEnemy() {
 
 function drawEnemy () {
   if(enemies.length>0){
+    console.log(enemies[0].r)
     if(enemies[0].grow==true){
       enemies[0].r += .15;
       if(enemies[0].r >= 42){
@@ -531,21 +539,11 @@ function finalGrade() {
     ctx.font = "16px monospace";
     ctx.fillText(critique[rq].source, 200, 550)}, 5500);
 
-  if(score<=0){
-    window.setTimeout(function(){
-    ctx.font = "25px monospace";
-    ctx.fillText(`(Press the start button to replay level ${level+1})`, 50, 645)}, 7200);
-    level --;
-    speedIncrease -= 1.4999;
-    window.setTimeout(function(){restart=true}, 7200);
-    } 
-  
-  else{
-    window.setTimeout(function(){
-    ctx.font = "25px monospace";
-    ctx.fillText(`(Press the start button to play level ${level+1})`, 50, 645)}, 7200);
-    window.setTimeout(function(){restart=true}, 7200);
-    }
+  window.setTimeout(function(){
+      ctx.font = "25px monospace";
+      ctx.fillText(`(Press the start button to play level ${level+1})`, 50, 645)}, 7200);
+      window.setTimeout(function(){restart=true}, 7200);
+      
  }
 
 

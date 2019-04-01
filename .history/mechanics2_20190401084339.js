@@ -30,7 +30,9 @@ window.onload = function() {
 }
 
 
+
 function playGame(){
+  console.log(speedIncrease)
   restart=false
   soundtrack.play();
   assignTiles();
@@ -80,6 +82,7 @@ class Tile {
     this.finishX=finishX;
   }
 }
+
 
 
 function assignTiles() {
@@ -536,7 +539,7 @@ function finalGrade() {
     ctx.font = "25px monospace";
     ctx.fillText(`(Press the start button to replay level ${level+1})`, 50, 645)}, 7200);
     level --;
-    speedIncrease -= 1.4999;
+    speedIncrease -= 1.4999999;
     window.setTimeout(function(){restart=true}, 7200);
     } 
   
