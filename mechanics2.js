@@ -5,16 +5,16 @@
   let height = canvas.height;
   let width = canvas.width;
   let y1 = -50;
-  var pop = new Audio("pop.wav");
-  var sludgePop = new Audio('sludge-pop.wav');
-  var miss = new Audio('miss.flac');
-  var switchSound = new Audio('switch.wav');
-  var targetHit = new Audio('targetHit.wav');
-  var win = new Audio('win.wav');
-  var lose = new Audio('lose.wav');
+  var pop = new Audio("sounds/pop.wav");
+  var sludgePop = new Audio('sounds/sludge-pop.wav');
+  var miss = new Audio('sounds/miss.flac');
+  var switchSound = new Audio('sounds/switch.wav');
+  var targetHit = new Audio('sounds/targetHit.wav');
+  var win = new Audio('sounds/win.wav');
+  var lose = new Audio('sounds/lose.wav');
   let gameOn = false;
   let speedIncrease = 0;
-  var soundtrack = new Audio('Soundtrack_mp3.mp3')
+  var soundtrack = new Audio('sounds/Soundtrack_mp3.mp3')
   soundtrack.loop = true;
   let level = 0;
   let restart=true
@@ -449,7 +449,7 @@ function drawEnemy () {
 //END OF THE GAME
 
 function loseScreen() {
-  bullets.shift();
+  bullets = [];
   gameOn=false;
   level=0
   soundtrack.pause();
@@ -467,7 +467,7 @@ function loseScreen() {
   ctx.font = "50px monospace";
   setInterval(function(){}, 3000);ctx.fillText("Your final Score: ", 150,300);
   window.setTimeout(function(){
-  ctx.clearRect(0,0, width ,height);
+  
   ctx.fillText("" + score, 480, 400)}, 1200);
   
   ctx.font = "30px monospace";
@@ -480,7 +480,7 @@ function loseScreen() {
 
 
 function winScreen () {
-  bullets.shift();
+  bullets = [];
   gameOn=false;
   win.play();
   ctx.clearRect(0,0, width ,height);
