@@ -196,7 +196,7 @@ class Bullet{
   constructor(bulletColor, bulletX){
     this.color=bulletColor;
     this.x=bulletX;
-    this.y=545;
+    this.y=560;
   }
 }
 
@@ -228,7 +228,7 @@ function drawBullet() {
       bullets.shift();
       return
      }
-    if (bullets[0].y <= (enemies[0].y+18) && bullets[0].x == enemies[0].spawnPoint - 15){
+    if (bullets[0].y <= (enemies[0].y+12) && bullets[0].x == enemies[0].spawnPoint - 15){
       testShooting();
       enemies.shift();
       bullets.shift();

@@ -196,7 +196,7 @@ class Bullet{
   constructor(bulletColor, bulletX){
     this.color=bulletColor;
     this.x=bulletX;
-    this.y=545;
+    this.y=560;
   }
 }
 
