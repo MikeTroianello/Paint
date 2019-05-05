@@ -510,13 +510,13 @@ function finalGrade() {
     if(score <= 0) {
       critique= badScore;
     }
-    else if(score > 0 && score <= 20)  {
+    else if(score > 0 && score <= 14)  {
       critique=lowScore;
     }
-    else if(score > 20 && score <= 40)  {
+    else if(score > 14 && score <= 29)  {
       critique=goodScore;
     }
-    else if(score > 40)  {
+    else if(score > 29)  {
       critique=highScore;
     }
   }
