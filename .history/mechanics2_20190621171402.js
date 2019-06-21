@@ -201,9 +201,9 @@ class Bullet {
 var bullets = [];
 
 function createBullet() {
-  if (bullets.length < 1) {
-    bullets.push(new Bullet(player.c, player.x + 15));
-  }
+  // if (bullets.length < 1) {
+  bullets.push(new Bullet(player.c, player.x + 15));
+  // }
 }
 
 function drawBullet() {
