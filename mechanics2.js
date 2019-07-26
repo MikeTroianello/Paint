@@ -362,6 +362,10 @@ document.onkeydown = function(e) {
           player.c = 3;
           switchSound.play();
           break;
+
+        case 13:
+        debugger;
+        break;
       }
       updateCanvas();
     }
